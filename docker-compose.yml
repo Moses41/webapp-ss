@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  selenium-chrome:
+    image: selenium/standalone-chrome:latest
+    container_name: selenium_chrome
+    shm_size: 2g  # Prevents crashes due to shared memory issues
+    ports:
+      - "4444:4444"  # WebDriver API
+      - "7900:7900"  # VNC debugging (optional)
+    volumes:
+      - /dev/shm:/dev/shm  # Improves browser performance in Docker
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:4444/wd/hub/status | grep -q '\"ready\": true'"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+  screenshot-script:
+    build: .
+    container_name: screenshot_script
+    depends_on:
+      selenium-chrome:
+        condition: service_healthy  # Ensure Selenium is ready before starting
+    volumes:
+      - ./screenshots:/screenshots
+    environment:
+      - SELENIUM_REMOTE_URL=http://selenium-chrome:4444/wd/hub
+    restart: "no"
+    entrypoint: ["/bin/sh", "-c", "sleep 10 && python3 /app/screenshot.py"]  # Add delay before running script
