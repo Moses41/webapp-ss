@@ -6,13 +6,13 @@ services:
     container_name: selenium_chrome-ss
     shm_size: 2g  # Prevents crashes due to shared memory issues
     ports:
-      - "4442:4444"  # WebDriver API
-      # - "7900:7900"  # VNC debugging (optional)
+      - "4444:4444"  # WebDriver API
+      - "7900:7900"  # VNC debugging (optional)
     volumes:
       - /dev/shm:/dev/shm  # Improves browser performance in Docker
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -s http://localhost:4442/wd/hub/status | grep -q '\"ready\": true'"]
+      test: ["CMD-SHELL", "curl -s http://localhost:4444/wd/hub/status | grep -q '\"ready\": true'"]
       interval: 10s
       timeout: 10s
       retries: 10
@@ -26,6 +26,6 @@ services:
     volumes:
       - ./screenshots:/screenshots
     environment:
-      - SELENIUM_REMOTE_URL=http://selenium-chrome:4442/wd/hub
+      - SELENIUM_REMOTE_URL=http://selenium-chrome:4444/wd/hub
     restart: "no"
     entrypoint: ["/bin/sh", "-c", "sleep 10 && python3 /app/screenshot_static.py"]  # Add delay before running script

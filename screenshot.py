@@ -23,7 +23,7 @@ chrome_options.add_argument("--disable-dev-shm-usage")
 
 # Connect to Selenium running in Docker
 driver = webdriver.Remote(
-    # command_executor="http://selenium-chrome:4444/wd/hub",
+    # command_executor="http://selenium-chrome:4444/wd/hub", # For Linux
     command_executor="http://localhost:4444/wd/hub",
     options=chrome_options
 )

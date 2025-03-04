@@ -5,7 +5,7 @@ import time
 
 # Define URLs to capture screenshots from
 urls = [
-    "https://eu.louisvuitton.com/"
+    "https://world.sisley.com/",
 ]
 
 # Define a folder to save screenshots
